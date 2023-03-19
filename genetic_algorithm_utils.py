@@ -3,6 +3,7 @@ import math
 import random
 import numpy as np
 
+#haversine function, to calculate distance
 def haversine(lat1, lon1, lat2, lon2):
     r = 6371  # radius of Earth in kilometers
     phi1 = math.radians(lat1)
@@ -15,6 +16,7 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     d = r * c
     return d
+
 
 # get euclidean distance from latitude and longitude
 def distance(town_one: str, town_two: str, town_positions):
@@ -37,8 +39,8 @@ def distance(town_one: str, town_two: str, town_positions):
     d = r * c
     return d
 
-import random
 
+#mutate children to avoid inbreeding
 def mutate(original: list, mutation_probability: float) -> list:
     #randomly set mutation to True or False
     mutation_yes = random.uniform(0, 1)
@@ -52,37 +54,31 @@ def mutate(original: list, mutation_probability: float) -> list:
             original[index1], original[index2] = original[index2], original[index1]
     return original
 
-
-
-
-
-
-
-
-
 # function to generate new population member from old one
-def create_list(parent1: list, parent2: list, p1: float, p2: float, mutation_probability : float) -> list:
+def create_list(parent1: list, parent2: list, mutation_probability : float) -> list:
     # Choose two random crossover points
     cxpoint1 = random.randint(0, len(parent1) - 1)
     cxpoint2 = random.randint(0, len(parent1) - 1)
     if cxpoint2 < cxpoint1:
         cxpoint1, cxpoint2 = cxpoint2, cxpoint1
 
-    parents = [parent1, parent2]
-    prob_list = [p1, p2]
-    # Create the child as a copy of one parent, weighted by fitness probability
-    child = copy.deepcopy(random.choices(parents, weights=prob_list, k=1)[0])
-    #remove already used parent
-    parents.remove(child)
     # Replace the elements between the two crossover points with elements from unused parent
-    for i in range(cxpoint1, cxpoint2 + 1):
-        if parents[0][i] not in child[cxpoint1:cxpoint2 + 1]:
-            child[i] = parents[0][i]
-        else:
-            for j in range(cxpoint2 + 1, len(parent1)):
-                if parent2[j] not in child:
-                    child[j] = parent2[i]
-                    break
+    child = parent1[cxpoint1:cxpoint2+1]
+
+    for i in range(cxpoint2, len(parent2)):
+        if parent2[i] not in child:
+            child.append(parent2[i])
+
+    for i in range(0, cxpoint1+1):
+        if parent2[i] not in child:
+            child.append(parent2[i])
+
+    for i in range(cxpoint1, cxpoint2+1):
+        if parent2[i] not in child:
+            child.append(parent2[i])
+
+    #mutate the child
     child = mutate(child, mutation_probability)
     return child
+
 

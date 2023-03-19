@@ -19,25 +19,10 @@ class population_member:
         return path_length
 
 
-def get_probabilities(parent1: population_member, parent2: population_member) -> Tuple[float, float]:
-    fitness_1 = parent1.fitness_value()
-    fitness_2 = parent2.fitness_value()
-    total_fitness = fitness_1 + fitness_2
-    # take the probability from the other fitness, as the lowest score gets the highest probability
-    p1 = fitness_2/total_fitness
-    p2 = fitness_1/total_fitness
-    return p1, p2
-
-
 def breed_with(parent1: population_member, parent2: population_member, mutation_probability: float) -> population_member:
-    #get 3 probabilites which add up to 1
-    p1, p2 = get_probabilities(parent1, parent2)
-    mutation_probability = min(mutation_probability, p1, p2)
-    p1 -= mutation_probability/2
-    p2 -= mutation_probability/2
 
-    child_townlist = create_list(parent1.ordered_towns, parent2.ordered_towns, p1, p2, mutation_probability)
-    child_town_position_dic = parent1.town_positions.copy()
+    child_townlist = create_list(parent1.ordered_towns, parent2.ordered_towns, mutation_probability)
+    child_town_position_dic = parent1.town_positions
     child = population_member(child_townlist, child_town_position_dic)
     return child
 
