@@ -20,6 +20,7 @@ if __name__ == '__main__':
     town_names = list(town_positions.keys())
 
     population_size = 1500
+    parenthood_choice = int(0.25*population_size)
 
     first_generation = [population_member(random.sample(town_names, len(town_names)), town_positions) for i in range(population_size)]
     generation = 0
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     while generation < 2500:
 
         current_fittest = current_population.order_by_fitness()[0].fitness_value()
-        current_population = evolve_next_gen(current_population)
+        current_population = evolve_next_gen(current_population, parenthood_choice)
         generation = current_population.generation
 
         if generation in [1, 10, 20, 50, 80, 100, 150, 200, 400, 500, 700, 1000, 1200, 1400, 1600, 1800, 2000]:
