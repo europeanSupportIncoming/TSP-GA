@@ -16,7 +16,7 @@ class whole_population:
         return sorted(self.population, key=lambda x: x.fitness_value())
 
 
-def evolve_next_gen(parent_gen: whole_population) -> whole_population:
+def evolve_next_gen(parent_gen: whole_population, paernthood_choice: int) -> whole_population:
     # get the elite gene members into the next round
     generation_index = parent_gen.generation
     elitism = parent_gen.elitism
@@ -25,7 +25,7 @@ def evolve_next_gen(parent_gen: whole_population) -> whole_population:
     next_gen = current_gen_sorted[:elitism]
     # mate into new generation
     while len(next_gen) < len(current_gen_sorted):
-        parent_1, parent_2 = random.sample(current_gen_sorted, k=2)
+        parent_1, parent_2 = random.sample(current_gen_sorted[:parenthood_choice +1], k=2)
         while parent_1 == parent_2:
             parent_1, parent_2 = random.sample(current_gen_sorted, k=2)
 
